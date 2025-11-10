@@ -9,5 +9,7 @@ namespace FocusFlow.Api.Models
       
 
         public ICollection<Activity> Activities { get; set; } = new List<Activity>();
+
+        public string? SpotifyRefreshToken { get; set; }
     }
 }

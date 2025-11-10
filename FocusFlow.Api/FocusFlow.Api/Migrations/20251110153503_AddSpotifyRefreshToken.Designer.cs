@@ -4,6 +4,7 @@ using FocusFlow.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FocusFlow.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251110153503_AddSpotifyRefreshToken")]
+    partial class AddSpotifyRefreshToken
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -112,73 +115,6 @@ namespace FocusFlow.Api.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("FocusFlow.Api.Models.FocusSession", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ActivityId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("AppUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime?>("EndTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("IntendedDurationMinutes")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Mood")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ActivityId");
-
-                    b.HasIndex("AppUserId");
-
-                    b.ToTable("FocusSessions");
-                });
-
-            modelBuilder.Entity("FocusFlow.Api.Models.SessionFeedback", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("FocusSessionId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("MusicFeedback")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("MusicGenreUsed")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ProductivityRating")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FocusSessionId")
-                        .IsUnique();
-
-                    b.ToTable("SessionFeedbacks");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -325,36 +261,6 @@ namespace FocusFlow.Api.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("FocusFlow.Api.Models.FocusSession", b =>
-                {
-                    b.HasOne("FocusFlow.Api.Models.Activity", "Activity")
-                        .WithMany()
-                        .HasForeignKey("ActivityId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("FocusFlow.Api.Models.AppUser", "User")
-                        .WithMany()
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Activity");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("FocusFlow.Api.Models.SessionFeedback", b =>
-                {
-                    b.HasOne("FocusFlow.Api.Models.FocusSession", "FocusSession")
-                        .WithOne("Feedback")
-                        .HasForeignKey("FocusFlow.Api.Models.SessionFeedback", "FocusSessionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("FocusSession");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -409,11 +315,6 @@ namespace FocusFlow.Api.Migrations
             modelBuilder.Entity("FocusFlow.Api.Models.AppUser", b =>
                 {
                     b.Navigation("Activities");
-                });
-
-            modelBuilder.Entity("FocusFlow.Api.Models.FocusSession", b =>
-                {
-                    b.Navigation("Feedback");
                 });
 #pragma warning restore 612, 618
         }

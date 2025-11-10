@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 // >>>
 
@@ -62,12 +63,43 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization(); // Activează autorizarea
 //
 
+builder.Services.AddHttpClient(); // <<< Adaugă această linie
+
 // Liniile de mai jos ar trebui să fie deja în fișierul tău
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    // 1. Definim schema de securitate (cum arată autentificarea)
+    options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        Description = "Introduceți 'Bearer' [spațiu] urmat de token-ul JWT. Exemplu: 'Bearer 12345abcdef'"
+    });
+
+    // 2. Aplicăm această cerință de securitate la nivel global (pentru toate endpoint-urile)
+    options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
+});
 
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<ISpotifyService, SpotifyService>(); // <<< Adaugă această linie
 
 var app = builder.Build();
 
@@ -77,6 +109,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
 app.UseHttpsRedirection();
 app.UseAuthentication(); 

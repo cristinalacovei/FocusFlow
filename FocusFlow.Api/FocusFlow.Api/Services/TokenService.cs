@@ -22,11 +22,13 @@ namespace FocusFlow.Api.Services
         {
             // 1. Definim "revendicările" (Claims) - ce informații punem în token
             var claims = new List<Claim>
-            {
-                new Claim(JwtRegisteredClaimNames.NameId, user.UserName!), // Numele utilizatorului
-                new Claim(JwtRegisteredClaimNames.Email, user.Email!),     // Email-ul
-                new Claim(ClaimTypes.NameIdentifier, user.Id) // ID-ul unic al utilizatorului
-            };
+{
+    new Claim(ClaimTypes.NameIdentifier, user.Id),
+    new Claim(ClaimTypes.Name, user.UserName!),
+    new Claim(ClaimTypes.Email, user.Email!)
+};
+
+
 
             // 2. Definim "semnătura" (Credentials) - cum securizăm token-ul
             var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
