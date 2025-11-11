@@ -1,23 +1,63 @@
-<div class="login-container">
-  <h2>FocusFlow Login</h2>
+<div class="login-page">
+  <canvas #particlesCanvas class="particles-canvas"></canvas>
 
-  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label for="username">Utilizator</label>
-      <input type="text" id="username" formControlName="username" />
+  <div class="info-section">
+    <div class="branding">
+      <img src="focus-flow-logo.png" alt="FocusFlow" class="logo" />
+      <h1>FocusFlow</h1>
+      <p class="tagline">Tune your mind. Flow through focus.</p>
     </div>
 
-    <div class="form-group">
-      <label for="password">Parolă</label>
-      <input type="password" id="password" formControlName="password" />
+    <div class="description">
+      <p>
+        FocusFlow blends <strong>music</strong> and the
+        <strong>science of focus</strong> to help you enter the
+        <strong>flow state</strong> faster. Create personalized work sessions,
+        connect your Spotify account, and let the app choose the
+        <em>perfect soundtrack for your productivity</em>.
+      </p>
+
+      <ul>
+        <li>🎧 Personalized music for each activity</li>
+        <li>🧠 Smart focus analysis and adaptive recommendations</li>
+        <li>📊 Progress dashboard and productivity insights</li>
+      </ul>
     </div>
+  </div>
 
-    <button type="submit" [disabled]="loginForm.invalid">Login</button>
+  <div class="auth-section">
+    <div class="login-container">
+      <h2>Login</h2>
 
-    <div *ngIf="loginError" class="error-message">
-      {{ loginError }}
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            formControlName="username"
+            placeholder="e.g. alex_dev"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            formControlName="password"
+            placeholder="••••••••"
+          />
+        </div>
+
+        <button type="submit" [disabled]="loginForm.invalid">Login</button>
+
+        <div *ngIf="loginError" class="error-message">
+          {{ loginError }}
+        </div>
+      </form>
+
+      <p>Don’t have an account? <a routerLink="/register">Sign up</a></p>
     </div>
-  </form>
-
-  <p>Nu ai cont? <a routerLink="/register">Înregistrează-te</a></p>
+  </div>
 </div>
