@@ -63,10 +63,10 @@ namespace FocusFlow.Api.Services
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
             // 2. Facem cererea GET către API-ul de căutare Spotify
-            var searchUrl = $"accounts.spotify.com/v1/search" +
-                            $"?q={Uri.EscapeDataString(searchQuery)}" +
-                            $"&type=playlist" +
-                            $"&limit=1"; // Vrem doar un rezultat (cel mai relevant)
+            var searchUrl = "https://api.spotify.com/v1/search" +
+                $"?q={Uri.EscapeDataString(searchQuery)}" +
+                "&type=playlist" +
+                "&limit=1"; // Vrem doar un rezultat (cel mai relevant)
 
             var response = await client.GetAsync(searchUrl);
 

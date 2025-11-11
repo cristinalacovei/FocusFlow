@@ -13,6 +13,18 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins("http://localhost:4200") // Adresa Angular
+                                .AllowAnyHeader()
+                                .AllowAnyMethod();
+                      });
+});
 // --- Începe secțiunea de adăugat --- // <<<
 
 // 1. Citește connection string-ul din appsettings.json
@@ -112,7 +124,11 @@ if (app.Environment.IsDevelopment())
 
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
+app.UseCors(MyAllowSpecificOrigins);
 app.UseAuthentication(); 
 app.UseAuthorization();  
 

@@ -1,0 +1,112 @@
+<div class="dashboard-container">
+  <h1>Dashboard-ul tău</h1>
+
+  <div class="error-message" *ngIf="apiError">
+    {{ apiError }}
+  </div>
+
+  <div *ngIf="!isInSession; else sessionActiveTemplate">
+    <section class="focus-selector">
+      <h2>🚀 Începe o sesiune de Focus</h2>
+      <form [formGroup]="sessionForm" (ngSubmit)="onStartSession()">
+        <div class="form-group">
+          <label for="activity">Ce vrei să faci?</label>
+          <select id="activity" formControlName="activityId">
+            <option [ngValue]="null" disabled>
+              Selectează o activitate...
+            </option>
+            <option *ngFor="let activity of activities" [value]="activity.id">
+              {{ activity.name }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="mood">Cum te simți?</label>
+          <select id="mood" formControlName="mood">
+            <option value="Motivat">Motivat</option>
+            <option value="Obosit">Obosit</option>
+            <option value="Stresat">Stresat</option>
+            <option value="Creativ">Creativ</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="duration">Durata (minute):</label>
+          <select id="duration" formControlName="durationMinutes">
+            <option value="25">25 (Pomodoro)</option>
+            <option value="45">45</option>
+            <option value="60">60</option>
+          </select>
+        </div>
+
+        <button type="submit" [disabled]="sessionForm.invalid">
+          Începe Focusul
+        </button>
+      </form>
+    </section>
+
+    <hr />
+
+    <section class="activity-manager">
+      <h2>Gestionează Activitățile</h2>
+
+      <div class="activity-form">
+        <h3>Adaugă o activitate nouă</h3>
+        <form [formGroup]="activityForm" (ngSubmit)="onAddActivity()">
+          <input
+            type="text"
+            formControlName="name"
+            placeholder="Nume activitate (ex: Studiu)"
+          />
+          <button type="submit" [disabled]="activityForm.invalid">
+            Adaugă
+          </button>
+        </form>
+      </div>
+
+      <div class="activity-list">
+        <h3>Activitățile tale</h3>
+        <ul>
+          <li *ngFor="let activity of activities">
+            <span>{{ activity.name }}</span>
+            <button (click)="onDeleteActivity(activity.id)">Șterge</button>
+          </li>
+          <li *ngIf="activities.length === 0">
+            Nu ai nicio activitate adăugată.
+          </li>
+        </ul>
+      </div>
+    </section>
+  </div>
+
+  <ng-template #sessionActiveTemplate>
+    <section class="session-active">
+      <h2>Sesiune Activă</h2>
+
+      <div class="timer-placeholder">
+        <h2>(TIMERUL VA FI AICI)</h2>
+      </div>
+
+      <div
+        class="spotify-placeholder"
+        *ngIf="currentPlaylistEmbedUrl; else noPlaylist"
+      >
+        <p>Playlist Spotify pentru sesiunea ta:</p>
+        <iframe
+          [src]="currentPlaylistEmbedUrl | safeUrl"
+          width="360"
+          height="420"
+          frameborder="0"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        ></iframe>
+      </div>
+
+      <ng-template #noPlaylist>
+        <p>Nu am primit niciun playlist Spotify pentru sesiunea asta.</p>
+      </ng-template>
+
+      <button (click)="onEndSession()">Termină Sesiunea și dă Feedback</button>
+    </section>
+  </ng-template>
+</div>

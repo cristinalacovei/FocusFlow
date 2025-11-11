@@ -1,0 +1,20 @@
+<div class="profile-container">
+  <h1>Profilul Tău</h1>
+  <p>Aici îți poți gestiona setările.</p>
+
+  <p><a routerLink="/dashboard">&larr; Înapoi la Dashboard</a></p>
+
+  <hr />
+
+  <h2>Conexiuni</h2>
+  <p>
+    Conectează-ți contul Spotify pentru a primi muzică personalizată în timpul
+    sesiunilor de focus.
+  </p>
+
+  <button (click)="connectSpotify()">Conectează-te cu Spotify</button>
+
+  <div *ngIf="connectionMessage" class="message">
+    {{ connectionMessage }}
+  </div>
+</div>

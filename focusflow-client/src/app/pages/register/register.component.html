@@ -1,0 +1,35 @@
+<div class="register-container">
+  <h2>Creează un cont FocusFlow</h2>
+
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="username">Utilizator</label>
+      <input type="text" id="username" formControlName="username" />
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" formControlName="email" />
+    </div>
+
+    <div class="form-group">
+      <label for="password">Parolă</label>
+      <input type="password" id="password" formControlName="password" />
+      <small>*Minimum 6 caractere (setat în .NET Identity)</small>
+    </div>
+
+    <button type="submit" [disabled]="registerForm.invalid">
+      Înregistrare
+    </button>
+
+    <div *ngIf="registerError" class="error-message">
+      {{ registerError }}
+    </div>
+
+    <div *ngIf="registerSuccess" class="success-message">
+      {{ registerSuccess }}
+    </div>
+  </form>
+
+  <p>Ai deja cont? <a routerLink="/login">Loghează-te</a></p>
+</div>
